@@ -10,5 +10,15 @@ iterative: iterative.c
 recursive: recursive.c
 	$(CC) $(CFLAGS_common) -o $@ $@.c
 
+run: 
+	./iterative
+	./recursive
+
+perf:
+	echo "echo 1 > /proc/sys/vm/drop_caches" | sudo sh
+	perf stat -r 1000 -e cache-misses,cache-references,L1-dcache-load-misses,L1-dcache-store-misses,L1-dcache-prefetch-misses,L1-icache-load-misses ./recursive
+	perf stat -r 1000 -e cache-misses,cache-references,L1-dcache-load-misses,L1-dcache-store-misses,L1-dcache-prefetch-misses,L1-icache-load-misses ./iterative
+
 clean:
 	$(RM) $(EXEC) *.o perf.*
+	$(RM) q2_recursive.txt q2_iterative.txt
