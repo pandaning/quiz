@@ -16,8 +16,7 @@ static double diff_in_second(struct timespec t1, struct timespec t2)
     return (diff.tv_sec + diff.tv_nsec / 1000000000.0);
 }
 
-struct TreeNode 
-{
+struct TreeNode {
     int val;
     struct TreeNode *left;
     struct TreeNode *right;
@@ -25,12 +24,10 @@ struct TreeNode
 
 void freeNode(struct TreeNode *ptr)
 {
-    if(ptr -> left)
-    {
+    if(ptr -> left) {
         freeNode(ptr -> left);
     }
-    if(ptr -> right)
-    {
+    if(ptr -> right) {
         freeNode(ptr -> right);
     }
     free(ptr);
@@ -39,8 +36,7 @@ void flatten(struct TreeNode* root)
 {
     if(root==NULL) return ;
     struct TreeNode *ptr, *tmp;
-    while(root) 
-    {
+    while(root) {
         tmp=root->right;
         root->right=root->left;
         root->left=NULL;
@@ -55,8 +51,7 @@ void flatten(struct TreeNode* root)
 void CreateNode(struct TreeNode *tmp,char *route,int num)
 {
     int i=0;
-    for(; i<strlen(route); i++) 
-    {
+    for(; i<strlen(route); i++) {
         if(route[i]=='L') {
             if(tmp->left==NULL) {
                 tmp->left=malloc(sizeof(struct TreeNode));
@@ -66,8 +61,7 @@ void CreateNode(struct TreeNode *tmp,char *route,int num)
             } else {
                 tmp=tmp->left;
             }
-        } 
-        else if(route[i]=='R') {
+        } else if(route[i]=='R') {
             if(tmp->right==NULL) {
                 tmp->right=malloc(sizeof(struct TreeNode));
                 tmp=tmp->right;
@@ -92,7 +86,7 @@ void output_node(struct TreeNode* tmp)
 void BuildRandomTree(struct TreeNode *root,int nodeNum)
 {
     srand(time(0));
-    char branch[][2]={"L","R"};
+    char branch[][2]= {"L","R"};
     char store[nodeNum][nodeNum];
     int mark[nodeNum][2];
     int Num[nodeNum];
@@ -101,20 +95,17 @@ void BuildRandomTree(struct TreeNode *root,int nodeNum)
     memset(Num,0,sizeof(Num));
     Num[0] = 1;
     int curNum = 1;
-    for(curNum;curNum < nodeNum ;curNum++)
-    {
+    for(curNum; curNum < nodeNum ; curNum++) {
         int num;
-        do
-        {
+        do {
             num=rand()%nodeNum;
-        }while(Num[num]);
-       Num[num]=1;
+        } while(Num[num]);
+        Num[num]=1;
         int LR=rand()%2;
         int randNode;
-        do
-        {
+        do {
             randNode=rand()%curNum;
-        }while(mark[randNode][LR]);
+        } while(mark[randNode][LR]);
         mark[randNode][LR]=1;
         char newNode[nodeNum];
         memset(newNode,0,sizeof(newNode));
