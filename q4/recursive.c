@@ -21,7 +21,7 @@ static double diff_in_second(struct timespec t1, struct timespec t2)
 int maxsum(int A[],int x,int y)
 {
     int v,L,R,maxs,i;
-    if(y-x==1) return A[0];
+    if(y-x==1) return A[x];
     int m=x+(y-x)/2;
     maxs=max(maxsum(A,x,m),maxsum(A,m,y));
     v=0;
@@ -48,18 +48,30 @@ int main()
     FILE *file = fopen("q4_recursive.txt", "a");
     double cpu_time1;
     struct timespec start, end;
-    int arr[10]= {-2,1,-3,4,-1,2,1,-5,4};
-    int arr1[4]= {-2,-5,-3};
-    int arr2[2]= {-2};
 
-    clock_gettime(CLOCK_REALTIME, &start);
-    assert(maxSubArray(arr,10)==6);
-    clock_gettime(CLOCK_REALTIME, &end);
+    FILE *fp = fopen("test.txt","r");
+    char txtEachLine[700];
+    char txtAns[100];
+    while(fgets(txtEachLine, sizeof(txtEachLine), fp)) {
+        txtEachLine[strlen(txtEachLine)-1] = '\0';
+        int arr[200];
+        int index = 0;
+        char *pch = strtok(txtEachLine,",");
+        while(pch) {
+            arr[index++] = atoi(pch);
+            pch = strtok(NULL, ",");
+        }
+        int ans = 0;
+        fgets(txtAns, sizeof(txtAns), fp);
+        txtAns[strlen(txtAns)-1] = '\0';
+        ans = atoi(txtAns);
+        clock_gettime(CLOCK_REALTIME, &start);
+        assert(maxSubArray(arr,index) == ans);
+        clock_gettime(CLOCK_REALTIME, &end);
 
-    assert(maxSubArray(arr1,4)==-2);
-    assert(maxSubArray(arr2,2)==-2);
-    cpu_time1 = diff_in_second(start, end);
-    printf("execution time: %lf sec\n", cpu_time1);
-    fprintf(file, "%f\n", cpu_time1);
+        cpu_time1 = diff_in_second(start, end);
+        printf("execution time: %lf sec\n", cpu_time1);
+        fprintf(file, "%f\n", cpu_time1);
+    }
     return 0;
 }
